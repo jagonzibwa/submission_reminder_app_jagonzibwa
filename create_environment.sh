@@ -1,9 +1,17 @@
 #!/bin/bash
 
-echo -e "What is your name?"
+echo "What is your name?"
 read student_name
+
+
+#Creating a variable for making the directory
 mkdirsub=submissions_reminder_$student_name
+
+
 mkdir $mkdirsub
+
+
+#Creating all the directories necessary
 mkdir -p $mkdirsub/{app,modules,config,assets}
 
 #Creating and writing into the functions.sh file
@@ -90,7 +98,3 @@ EOF
 
 #Adding executing permissions to startup.sh
 chmod u+x $mkdirsub/startup.sh
-
-
-#Running startup.sh
-bash ./$mkdirsub/startup.sh
