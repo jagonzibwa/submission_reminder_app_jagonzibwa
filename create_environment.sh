@@ -1,10 +1,13 @@
 #!/bin/bash
+
 echo -e "What is your name?"
 read student_name
-mkdirsub="submissions_reminder_$name"
+mkdirsub=submissions_reminder_$student_name
 mkdir $mkdirsub
-mkdir -p $mkdirsub/{app,models,config,assets}
-cat <<'EOF' > $mkdirsub/models/functions.sh
+mkdir -p $mkdirsub/{app,modules,config,assets}
+
+#Creating and writing into the functions.sh file
+cat <<'EOF' > $mkdirsub/modules/functions.sh
 #!/bin/bash
 
 # Function to read submissions file and output students who have not submitted
@@ -25,7 +28,10 @@ function check_submissions {
         fi
     done < <(tail -n +2 "$submissions_file") # Skip the header
 }
-'EOF'
+EOF
+
+
+#Creating and writing into the reminder.sh file
 cat <<'EOF' > $mkdirsub/app/reminder.sh
 #!/bin/bash
 
@@ -42,7 +48,10 @@ echo "Days remaining to submit: $DAYS_REMAINING days"
 echo "--------------------------------------------"
 
 check_submissions $submissions_file
-'EOF'
+EOF
+
+
+#Creating and writing into the submissions.txt file
 cat <<'EOF' > $mkdirsub/assets/submissions.txt
 student, assignment, submission status
 Chinemerem, Shell Navigation, not submitted
@@ -54,12 +63,34 @@ Harmony, Shell Basics, not submitted
 Habeeb, Shell Basics, not submitted
 Towi, Git, submitted
 Larry, Git, submitted
-'EOF'
+EOF
+
+
+#Creating and writing into the config.env file
 cat <<'EOF' > $mkdirsub/config/config.env
 # This is the config file
 ASSIGNMENT="Shell Navigation"
 DAYS_REMAINING=2
-'EOF'
-cat <<'EOF' > $mkirsub/startup.sh
+EOF
+
+#Adding executing permissions to reminder.sh, functions.sh, and confi.env
+chmod u+x $mkdirsub/app/reminder.sh
+chmod u+x $mkdirsub/modules/functions.sh
+chmod u+x $mkdirsub/config/config.env
+
+
+
+#Creating and writing into the startup.sh file
+cat <<EOF > $mkdirsub/startup.sh
 #!/bin/bash
-bash ./app/reminder.sh
+cd "$(dirname "$0")/$mkdirsub"
+./app/reminder.sh
+EOF
+
+
+#Adding executing permissions to startup.sh
+chmod u+x $mkdirsub/startup.sh
+
+
+#Running startup.sh
+bash ./$mkdirsub/startup.sh
